@@ -1,5 +1,5 @@
 # BetAbi
-A calculator for 2 opposing odds on a bookie. 
+A calculator for 2 opposing odds on a bookie. With it you could place bets and get some profits despite loosing to one of the outcomes. If you know, you know.
 
 ### Disclaimer:
 - For maths purposes, bet on any bookie at your risk.
