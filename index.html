@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bet Arbitrage—Calculator</title>
+  <header>BetAbi</header>
+  <style>
+    header {
+      font-size: 3em;
+      text-align: center;
+      text-shadow: 0 0 1em dodgerblue;
+      margin: 1em;
+    }
+
+    body {
+      background: rgb(15, 25, 55);
+      color: whitesmoke;
+      margin: 2em 5em;
+      font-size: 1em;
+      font-family: Sans-Serif;
+      font-weight: bold;
+    }
+
+    input {
+      height: 2em;
+      min-width: 100%;
+      outline: none;
+      resize: none;
+      display: block;
+      position: relative;
+      caret-color: dodgerblue;
+      border-radius: .3em;
+      font-weight: bold;
+    }
+
+    #i,
+    #res {
+      box-sizing: border-box;
+      padding: 1.5em;
+      border-radius: 1em;
+      box-shadow: 0 0 .5em dodgerblue;
+    }
+
+    #st {
+      text-align: center;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    #res {
+      text-align: center;
+      margin-bottom: 3em;
+    }
+
+    span {
+      font-weight: normal;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="i">
+    <label>Odd 1:</label>
+    <input id="1" type="number">
+    <br>
+    <br>
+    <label>Odd 2:</label>
+    <input id="2" type="number">
+    <br>
+    <br>
+    <label>Stake:</label>
+    <input id="s" type="number">
+    <br>
+    <br>
+    <div id="st" onclick="run()">GO!</div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div id="res">
+    <div class="xb"><label>Stake 1: </label><span id="s1">0.00</span></div>
+    <br>
+    <div class="xb"><label>Stake 2: </label><span id="s2">0.00</span></div>
+    <br>
+    <div class="xb"><label>ROI 1: </label><span id="roi1">0.00</span></div>
+    <br>
+    <div class="xb"><label>ROI 2: </label><span id="roi2">0.00</span></div>
+    <br>
+    <div class="xb"><label>ROI Odds: </label><span id="oddsx">0.00</span></div>
+    <br>
+    <br>
+    <br>
+    <div class="xb"><label>Status: </label> <span id="stat">?</span></div>
+  </div>
+  *The higher the 2 odds, the better.<br>*This calculator is limited to 2 decimals.
+</body>
+<script>
+  let odds1, odds2, totalStake
+
+  function run() {
+    const good = validate()
+    if (!good) return
+    const result = calculateStakes(odds1, odds2, totalStake);
+    if (result.stake1 == 0 || result.stake2 == 0) {
+      alert("One Or 2 Of the Stakes are too low. BetAbi is also limited to 2 decimal places, this may round down stakes at 0.04 to 0.00.")
+      return
+    }
+    document.getElementById("s1").textContent = result.stake1
+    document.getElementById("s2").textContent = result.stake2
+    const ROI1 = Number((result.stake1 * odds1).toFixed(2))
+    const ROI2 = Number((result.stake2 * odds2).toFixed(2))
+    const oddsAvr = Number((((ROI1 + ROI2) / totalStake) / 2).toFixed(2))
+    document.getElementById("roi1").textContent = ROI1
+    document.getElementById("roi2").textContent = ROI2
+    document.getElementById("oddsx").textContent = oddsAvr
+    if (oddsAvr > 1.01) {
+      document.getElementById("stat").textContent = "profit"
+      document.getElementById("res").style.boxShadow = "0 0 1em green"
+    }
+    else if (oddsAvr === 1.00) {
+      document.getElementById("stat").textContent = "draw"
+      document.getElementById("res").style.boxShadow = "0 0 1em grey"
+    }
+    else {
+      document.getElementById("stat").textContent = "loss"
+      document.getElementById("res").style.boxShadow = "0 0 1em red"
+    }
+  }
+
+  function validate() {
+    odds1 = document.getElementById("1").value
+    odds2 = document.getElementById("2").value
+    totalStake = document.getElementById("s").value
+    if (/^\s*$/g.test(odds1) || /^\s*$/g.test(odds2) || /^\s*$/g.test(totalStake)) { //|| /\D/g.test(odds1) || /\D/g.test(odds2) || /\D/g.test(totalStake)) {
+      alert("Provide the damn things correctly.")
+      return false
+    }
+    return true
+  }
+
+  function calculateStakes(odds1, odds2, totalStake) {
+    odds1 = Number(odds1)
+    odds2 = Number(odds2)
+    const totalOdds = odds1 + odds2;
+    const stake1 = (totalStake * (odds2 / totalOdds)).toFixed(2);
+    const stake2 = (totalStake * (odds1 / totalOdds)).toFixed(2);
+
+    return {
+      stake1: stake1,
+      stake2: stake2
+    };
+  }
+</script>
+  
+</html>
