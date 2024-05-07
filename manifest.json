@@ -11,7 +11,7 @@
   "icons": [
     {
       "src": "./assets/favicon.jpg",
-      "sizes": "180x180",
+      "sizes": "720x752",
       "type": "image/jpg"
     }
   ],
