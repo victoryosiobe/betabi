@@ -1,0 +1,22 @@
+{
+  "name": "BetAbi",
+  "version": "0.0.0.0",
+  "short_name": "BetAbi",
+  "description": "BetAbi, Calculate Sure!",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "rgb(15, 25, 55)",
+  "theme_color": "dodgerblue",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./assets/favicon.jpg",
+      "sizes": "180x180",
+      "type": "image/jpg"
+    }
+  ],
+  "categories": ["Betting" , "Arbitrage Betting", "Arbitrage Betting Calculator"],
+  "lang": "en",
+  "dir": "rtl",
+  "prefer_related_applications": true
+}
