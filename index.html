@@ -111,12 +111,6 @@
     odds2 = Number(odds2)
     totalStake = Number(totalStake)
 
-    const arbCheck = (1 / odds1 + 1 / odds2)
-    if (arbCheck >= 1) {
-      alert("No arbitrage opportunity. The combined implied probability is above 100%.")
-      return
-    }
-
     const result = calculateStakes(odds1, odds2, totalStake);
     if (result.stake1 == 0 || result.stake2 == 0) {
       alert("One or both stakes are too low. Rounding may result in 0.00.")
