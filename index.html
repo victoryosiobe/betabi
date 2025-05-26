@@ -106,28 +106,44 @@
   function run() {
     const good = validate()
     if (!good) return
-    const result = calculateStakes(odds1, odds2, totalStake);
-    if (result.stake1 == 0 || result.stake2 == 0) {
-      alert("One Or 2 Of the Stakes are too low. BetAbi is also limited to 2 decimal places, this may round down stakes at 0.04 to 0.00.")
+
+    odds1 = Number(odds1)
+    odds2 = Number(odds2)
+    totalStake = Number(totalStake)
+
+    const arbCheck = (1 / odds1 + 1 / odds2)
+    if (arbCheck >= 1) {
+      alert("No arbitrage opportunity. The combined implied probability is above 100%.")
       return
     }
+
+    const result = calculateStakes(odds1, odds2, totalStake);
+    if (result.stake1 == 0 || result.stake2 == 0) {
+      alert("One or both stakes are too low. Rounding may result in 0.00.")
+      return
+    }
+
     document.getElementById("s1").textContent = result.stake1
     document.getElementById("s2").textContent = result.stake2
+
     const ROI1 = Number((result.stake1 * odds1).toFixed(2))
     const ROI2 = Number((result.stake2 * odds2).toFixed(2))
-    const oddsAvr = Number((((ROI1 + ROI2) / totalStake) / 2).toFixed(2))
     document.getElementById("roi1").textContent = ROI1
     document.getElementById("roi2").textContent = ROI2
-    document.getElementById("oddsx").textContent = oddsAvr
-    if (oddsAvr > 1.01) {
+
+    const minReturn = Math.min(ROI1, ROI2)
+    const profit = (minReturn - totalStake).toFixed(2)
+    const profitRatio = (minReturn / totalStake).toFixed(2)
+
+    document.getElementById("oddsx").textContent = profitRatio
+
+    if (profit > 0) {
       document.getElementById("stat").textContent = "profit"
       document.getElementById("res").style.boxShadow = "0 0 1em green"
-    }
-    else if (oddsAvr === 1.00) {
+    } else if (profit == 0) {
       document.getElementById("stat").textContent = "draw"
       document.getElementById("res").style.boxShadow = "0 0 1em grey"
-    }
-    else {
+    } else {
       document.getElementById("stat").textContent = "loss"
       document.getElementById("res").style.boxShadow = "0 0 1em red"
     }
@@ -137,25 +153,20 @@
     odds1 = document.getElementById("1").value
     odds2 = document.getElementById("2").value
     totalStake = document.getElementById("s").value
-    if (/^\s*$/g.test(odds1) || /^\s*$/g.test(odds2) || /^\s*$/g.test(totalStake)) { //|| /\D/g.test(odds1) || /\D/g.test(odds2) || /\D/g.test(totalStake)) {
-      alert("Provide the damn things correctly.")
+    if (/^\s*$/.test(odds1) || /^\s*$/.test(odds2) || /^\s*$/.test(totalStake)) {
+      alert("Provide all fields correctly.")
       return false
     }
     return true
   }
 
-  function calculateStakes(odds1, odds2, totalStake) {
-    odds1 = Number(odds1)
-    odds2 = Number(odds2)
-    const totalOdds = odds1 + odds2;
-    const stake1 = (totalStake * (odds2 / totalOdds)).toFixed(2);
-    const stake2 = (totalStake * (odds1 / totalOdds)).toFixed(2);
-
-    return {
-      stake1: stake1,
-      stake2: stake2
-    };
+  function calculateStakes(o1, o2, stake) {
+    const inv1 = 1 / o1
+    const inv2 = 1 / o2
+    const totalInv = inv1 + inv2
+    const stake1 = (stake * inv1 / totalInv).toFixed(2)
+    const stake2 = (stake * inv2 / totalInv).toFixed(2)
+    return { stake1, stake2 }
   }
 </script>
-  
 </html>
