@@ -3,9 +3,9 @@ An arbitrage calculator for 2 opposing odds on a bookie. With it you could place
 
 ### Disclaimer:
 - For maths purposes, bet on any bookie at your risk.
-- Not affiliated with any thing, apart from maths.
+- Not affiliated with any thing.
 - Not liable to you losing your stake as by using it.
-- Services could be shut down anytime.
+- Services could seize anytime.
 
 ### Features:
 - You put in the odds, it tells you if you are to loose or not or draw.
